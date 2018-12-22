@@ -21,14 +21,18 @@ function drawBoard() {
                     document.getElementById("row"+i+"col"+j).className = "c"+grid[i][j];
                     out = grid[i][j];
                 }
-            } else if (percentages[i][j] == bestPercent && printPercents && !revealed[i][j]) {
-                document.getElementById("row"+i+"col"+j).className = "best";
+            } else if (printPercents) {
+                if (percentages[i][j] == bestPercent && printPercents && !revealed[i][j]) {
+                    document.getElementById("row"+i+"col"+j).className = "best";
+                } else {
+                    document.getElementById("row"+i+"col"+j).className = "empty";
+                }
             } else {
                 document.getElementById("row"+i+"col"+j).className = "empty";
             }
             
             document.getElementById("row"+i+"col"+j).innerHTML = out;
-            if (printPercents && !revealed[i][j]) {
+            if (printPercents && !revealed[i][j] && !flags[i][j] && percentages[i][j] != 1.02) {
                 document.getElementById("row"+i+"col"+j).innerHTML += " "+Math.round(100*percentages[i][j]);
             }
         }
@@ -86,6 +90,8 @@ function fin(id) {
         document.getElementById("message").innerHTML = "";
         done = false;
     }
+    document.getElementById("percents").checked = false;
+    disablePercents();
 }
 
 function zeroFill(number, width) {

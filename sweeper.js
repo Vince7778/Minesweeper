@@ -4,6 +4,8 @@
     you shouldn't steal the code anyways
     unless you're being held at gunpoint
     also don't hack, please
+
+    why would you want to steal my horrible code
 */
 
 var grid = [];
@@ -18,8 +20,35 @@ var done = false;
 var startTime = 0;
 var bestTimes = [[],[],[]];
 var usingPreset = 0;
-var printPercents = true;
+var printPercents = false;
 var bestPercent = 101;
+
+function disablePercents() {
+    printPercents = false;
+    drawBoard();
+}
+
+function enablePercents() {
+    percentages = [];
+    printPercents = true;
+    createPercentGrid(grid[0].length,grid.length);
+    updatePercents();
+    drawBoard();
+}
+
+function switchPercents() {
+    var enable = document.getElementById("percents");
+    if (clicks == 0) {
+        enable.checked = false;
+        return;
+    }
+
+    if (!enable.checked) {
+        disablePercents();
+    } else {
+        enablePercents();
+    }
+}
 
 function inBounds(x,y) {
     if (x >= 0 && x < grid[0].length && y >= 0 && y < grid.length) {
@@ -41,6 +70,7 @@ function surroundingSquares(x,y) {
 }
 
 function updatePercents() {
+    // This prints the percentages that a square is a mine. It doesn't work well and I'm probably going to remove it.
     percentages = [];
     createPercentGrid(grid[0].length,grid.length);
     for (var i = 0; i < grid.length; i++) {
@@ -59,7 +89,7 @@ function updatePercents() {
     for (var i = 0; i < grid.length; i++) {
         for (var j = 0; j < grid[i].length; j++) {
             if (percentages[i][j] == 0) {
-                percentages[i][j] = 1;
+                percentages[i][j] = 1.02;
             }
             if (!revealed[i][j]) bestPercent = Math.min(percentages[i][j],bestPercent);
         }
@@ -218,8 +248,6 @@ function rclick(row, column) {
                 numFlags++;
             }
         }
-        // putting this here 'cause i'm lazy
-        updatePercents();
         drawBoard();
     }
 }
@@ -264,7 +292,9 @@ function click(row, column) {
             }
             clicks++;
             // putting this here 'cause i'm lazy
-            updatePercents();
+            if (printPercents) {
+                updatePercents();
+            }
             drawBoard();
         }
         if (revealedSquares == grid.length * grid[0].length - mines) {
@@ -296,6 +326,8 @@ function debugGrid() {
     console.log(out);
 }
 
+// recursive function
+// TODO: replace with iterative to remove stack overflows
 function incrementNeighbors(width, height, row, column) {
     for (var i = Math.max(row - 1, 0); i <= row + 1 && i < height; i++) {
         for (var j = Math.max(column - 1, 0); j <= column + 1 && j < width; j++) {
@@ -306,6 +338,7 @@ function incrementNeighbors(width, height, row, column) {
     }
 }
 
+// places mines around the grid
 function generateMines(num, width, height) {
     while (num-- > 0) {
         var row = Math.floor(Math.random() * height);
@@ -338,7 +371,9 @@ function createGrid(width, height) {
         revealed.push(revRow);
         flags.push(revRow2);
     }
-    createPercentGrid(width,height);
+    if (printPercents) {
+        createPercentGrid(width,height);
+    }
 }
 
 function createPercentGrid(w,h) {
@@ -374,7 +409,11 @@ function createGame(mineNum, width, height) {
         numFlags = 0;
         revealedSquares = 0;
         createGrid(width, height);
+        // TODO: change to only generate mines after click
         generateMines(mines, width, height);
+        if (printPercents) {
+            updatePercents();
+        }
         $(".starthide").show();
         drawBoard();
         showBest();
