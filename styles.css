@@ -1,0 +1,62 @@
+#board, td:not(.invis) {
+    border: 1px solid black;
+    min-width: 25px;
+    height: 25px;
+    text-align: center;
+}
+.c1 {
+    color: blue;
+}
+.c2 {
+    color: green;
+}
+.c3 {
+    color: red;
+}
+.c4 {
+    color: purple;
+}
+.c5 {
+    color: maroon;
+}
+.c6 {
+    color: turquoise;
+}
+.c7 {
+    color: black;
+}
+.c8 {
+    color: #929191;
+}
+.flag {
+    background-color: #303030;
+    color: white;
+}
+.empty {
+    background-color: #999999;
+    color: black;
+}
+.best {
+    background-color: yellow;
+    color: black;
+}
+.mine {
+    background-color: red;
+    color: red;
+}
+.pmar {
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+#message {
+    font-size: 30px;
+}
+#besttimes {
+    margin-left: 70px;
+    margin-top: 70px;
+    width: 300px;
+    overflow-wrap: break-word;
+}
+#test {
+    display: inline;
+}
