@@ -1,7 +1,6 @@
 var interval;
 
 function drawBoard() {
-    console.log(flags)
     for (var i = 0; i < height; i++) {
         for (var j = 0; j < width; j++) {
             var out = "";
@@ -92,7 +91,6 @@ function fin(id) {
         done = false;
     }
     document.getElementById("percents").checked = false;
-    disablePercents();
 }
 
 // from stackoverflow
