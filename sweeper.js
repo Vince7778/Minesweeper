@@ -22,6 +22,8 @@ var bestTimes = [[],[],[]];
 var usingPreset = 0;
 var printPercents = false;
 var bestPercent = 101;
+var width = 0;
+var height = 0;
 
 function disablePercents() {
     printPercents = false;
@@ -31,7 +33,7 @@ function disablePercents() {
 function enablePercents() {
     percentages = [];
     printPercents = true;
-    createPercentGrid(grid[0].length,grid.length);
+    createPercentGrid();
     updatePercents();
     drawBoard();
 }
@@ -51,7 +53,7 @@ function switchPercents() {
 }
 
 function inBounds(x,y) {
-    if (x >= 0 && x < grid[0].length && y >= 0 && y < grid.length) {
+    if (x >= 0 && x < width && y >= 0 && y < height) {
         return true;
     }
     return false;
@@ -72,9 +74,9 @@ function surroundingSquares(x,y) {
 function updatePercents() {
     // This prints the percentages that a square is a mine. It doesn't work well and I'm probably going to remove it.
     percentages = [];
-    createPercentGrid(grid[0].length,grid.length);
-    for (var i = 0; i < grid.length; i++) {
-        for (var j = 0; j < grid[i].length; j++) {
+    createPercentGrid();
+    for (var i = 0; i < height; i++) {
+        for (var j = 0; j < width; j++) {
             if (!/[1-8]/.test(grid[i][j]) || !revealed[i][j]) continue;
             var n = [0,1,1,1,0,-1,-1,-1];
             var e = [1,1,0,-1,-1,-1,0,1];
@@ -86,8 +88,8 @@ function updatePercents() {
         }
     }
     bestPercent = 1.01;
-    for (var i = 0; i < grid.length; i++) {
-        for (var j = 0; j < grid[i].length; j++) {
+    for (var i = 0; i < height; i++) {
+        for (var j = 0; j < width; j++) {
             if (percentages[i][j] == 0) {
                 percentages[i][j] = 1.02;
             }
@@ -221,7 +223,7 @@ $(function() {
     });
 });
 
-function revealNeighbors(row,column,width,height) {
+function revealNeighbors(row,column) {
     for (var i = Math.max(row - 1, 0); i <= row + 1 && i < height; i++) {
         for (var j = Math.max(column - 1, 0); j <= column + 1 && j < width; j++) {
             if (grid[i][j] == -1) {
@@ -265,8 +267,6 @@ function revealAll() {
 
 function click(row, column) {
     if (!done) {
-        var height = grid.length;
-        var width = grid[0].length;
         if (!flags[row][column]) {
             if (grid[row][column] == -1) {
                 if (clicks == 0) {
@@ -280,6 +280,7 @@ function click(row, column) {
                 if (clicks == 0) {
                     startTime = + new Date();
                     interval = setInterval(incrementTime,1000);
+                    generateMines(mines, width, height, row, column)
                 }
                 if (grid[row][column] == 0) {
                     revealed[row][column] = true;
@@ -297,7 +298,7 @@ function click(row, column) {
             }
             drawBoard();
         }
-        if (revealedSquares == grid.length * grid[0].length - mines) {
+        if (revealedSquares == height * width - mines) {
             revealAll();
             fin(0);
         }
@@ -308,8 +309,8 @@ function click(row, column) {
 // just prints out a stringified version of the grid
 function debugGrid() {
     var out = "";
-    for (var i = 0; i < grid.length; i++) {
-        for (var j = 0; j < grid[i].length; j++) {
+    for (var i = 0; i < height; i++) {
+        for (var j = 0; j < width; j++) {
             if(grid[i][j] == -1) {
                 out += "X";
             } else {
@@ -339,11 +340,11 @@ function incrementNeighbors(width, height, row, column) {
 }
 
 // places mines around the grid
-function generateMines(num, width, height) {
+function generateMines(num, width, height, xX, xY) {
     while (num-- > 0) {
         var row = Math.floor(Math.random() * height);
         var column = Math.floor(Math.random() * width);
-        if (grid[row][column] == -1) {
+        if (grid[row][column] == -1 || (row == xX && column == xY)) {
             num++;
         } else {
             grid[row][column] = -1;
@@ -352,7 +353,7 @@ function generateMines(num, width, height) {
     }
 }
 
-function createGrid(width, height) {
+function createGrid() {
     clicks = 0;
     clearBoard();
     for (var i = 0; i < height; i++) {
@@ -371,22 +372,22 @@ function createGrid(width, height) {
         revealed.push(revRow);
         flags.push(revRow2);
     }
-    if (printPercents) {
-        createPercentGrid(width,height);
-    }
+    console.log(flags)
 }
 
-function createPercentGrid(w,h) {
-    for (var i = 0; i < h; i++) {
+function createPercentGrid() {
+    for (var i = 0; i < height; i++) {
         var row = [];
-        for (var j = 0; j < w; j++) {
+        for (var j = 0; j < width; j++) {
             row.push(0);
         }
         percentages.push(row);
     }
 }
 
-function createGame(mineNum, width, height) {
+function createGame(mineNum, width1, height1) {
+    height = height1;
+    width = width1;
     mines = mineNum;
     if (mines > width * height) {
         alert("Cannot have more mines than there are grid squares!");
@@ -408,9 +409,7 @@ function createGame(mineNum, width, height) {
         fin(2);
         numFlags = 0;
         revealedSquares = 0;
-        createGrid(width, height);
-        // TODO: change to only generate mines after click
-        generateMines(mines, width, height);
+        createGrid();
         if (printPercents) {
             updatePercents();
         }

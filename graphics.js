@@ -1,10 +1,11 @@
 var interval;
 
 function drawBoard() {
-    for (var i = 0; i < grid.length; i++) {
-        for (var j = 0; j < grid[0].length; j++) {
+    console.log(flags)
+    for (var i = 0; i < height; i++) {
+        for (var j = 0; j < width; j++) {
             var out = "";
-            if (flags[i][j]) {
+            if (flags[i][j]) { // flagged?
                 if (grid[i][j] != -1 && done) {
                     document.getElementById("row"+i+"col"+j).className = "empty";
                     out = "F";
@@ -12,7 +13,7 @@ function drawBoard() {
                     document.getElementById("row"+i+"col"+j).className = "flag";
                     out = "F";
                 }
-            } else if (revealed[i][j]) {
+            } else if (revealed[i][j]) { // revealed?
                 if (grid[i][j] == -1) {
                     document.getElementById("row"+i+"col"+j).className = "mine";
                 } else if (grid[i][j] == 0) {
@@ -21,13 +22,13 @@ function drawBoard() {
                     document.getElementById("row"+i+"col"+j).className = "c"+grid[i][j];
                     out = grid[i][j];
                 }
-            } else if (printPercents) {
+            } else if (printPercents) { // shows best squares
                 if (percentages[i][j] == bestPercent && printPercents && !revealed[i][j]) {
                     document.getElementById("row"+i+"col"+j).className = "best";
                 } else {
                     document.getElementById("row"+i+"col"+j).className = "empty";
                 }
-            } else {
+            } else { // unopened squares
                 document.getElementById("row"+i+"col"+j).className = "empty";
             }
             
@@ -46,7 +47,7 @@ function clearBoard() {
     document.getElementById("board").innerHTML = "";
 }
 
-function getReadableTime(diff) {
+function getReadableTime(diff) { // breaks if over an hour (why)
     var min = Math.floor(diff/60000);
     var sec = Math.round((diff/1000) % 60);
     return zeroFill(min,2) + ":" + zeroFill(sec,2);
@@ -74,19 +75,19 @@ function showBest() {
 }
 
 function fin(id) {
-    if (id == 0) {
+    if (id == 0) { // win
         document.getElementById("message").innerHTML = "YOU WIN!!! :)";
         done = true;
         clearInterval(interval);
         interval = 0;
         setBest();
-    } else if (id == 1) {
+    } else if (id == 1) { // lose
         document.getElementById("message").innerHTML = "YOU LOSE!!! :(";
         done = true;
         clearInterval(interval);
         interval = 0;
         drawBoard();
-    } else if (id == 2) {
+    } else if (id == 2) { // resets game
         document.getElementById("message").innerHTML = "";
         done = false;
     }
@@ -94,6 +95,7 @@ function fin(id) {
     disablePercents();
 }
 
+// from stackoverflow
 function zeroFill(number, width) {
   width -= number.toString().length;
   if ( width > 0 )
