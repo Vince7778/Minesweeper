@@ -54,39 +54,50 @@ function getReadableTime(diff) { // breaks if over an hour (why)
 
 function showBest() {
     var out = "";
-    for (var i = 0; i <= 2; i++) {
+    var out2 = "";
+    out2 += "<p class='pmar'>Easy:</p>";
+    if (bestTimes[0].length == 0) {
+        out2 += "<p class='pmar'>None</p>";
+    } else {
+        for (var n = 0; n < 8 && n < bestTimes[0].length; n++) {
+            out2 += "<p class='pmar'>" + getReadableTime(bestTimes[0][n]) + "</p>";
+        }
+    }
+    for (var i = 0; i <= 1; i++) {
         if (i == 0) {
-            out += "<p class='pmar'>Easy:</p>";
-        } else if (i == 1) {
             out += "<p class='pmar'>Medium:</p>";
-        } else if (i == 2) {
+        } else if (i == 1) {
             out += "<p class='pmar'>Hard:</p>";
         }
-        if (bestTimes[i].length == 0) {
+        if (bestTimes[i+1].length == 0) {
             out += "<p class='pmar'>None</p>";
         } else {
-            for (var j = 0; j < 8 && j < bestTimes[i].length; j++) {
-                out += "<p class='pmar'>" + getReadableTime(bestTimes[i][j]) + "</p>";
+            for (var j = 0; j < 8 && j < bestTimes[i+1].length; j++) {
+                out += "<p class='pmar'>" + getReadableTime(bestTimes[i+1][j]) + "</p>";
             }
         }
     }
     document.getElementById("besttimes").innerHTML = out;
+    document.getElementById("besttimeseasy").innerHTML = out2;
 }
 
 function fin(id) {
     if (id == 0) { // win
         document.getElementById("message").innerHTML = "YOU WIN!!! :)";
+        document.getElementById("message").style.display = "block";
         done = true;
         clearInterval(interval);
         interval = 0;
         setBest();
     } else if (id == 1) { // lose
         document.getElementById("message").innerHTML = "YOU LOSE!!! :(";
+        document.getElementById("message").style.display = "block";
         done = true;
         clearInterval(interval);
         interval = 0;
         drawBoard();
     } else if (id == 2) { // resets game
+        document.getElementById("message").style.display = "none";
         document.getElementById("message").innerHTML = "";
         done = false;
     }

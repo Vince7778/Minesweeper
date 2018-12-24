@@ -88,12 +88,12 @@ function updatePercents() {
         }
     }
     bestPercent = 1.01;
-    for (var i = 0; i < height; i++) {
-        for (var j = 0; j < width; j++) {
-            if (percentages[i][j] == 0) {
-                percentages[i][j] = 1.02;
+    for (var l = 0; l < height; l++) {
+        for (var m = 0; m < width; m++) {
+            if (percentages[l][m] == 0) {
+                percentages[l][m] = 1.02;
             }
-            if (!revealed[i][j]) bestPercent = Math.min(percentages[i][j],bestPercent);
+            if (!revealed[l][m]) bestPercent = Math.min(percentages[l][m],bestPercent);
         }
     }
 }
@@ -280,7 +280,7 @@ function click(row, column) {
                 if (clicks == 0) {
                     startTime = + new Date();
                     interval = setInterval(incrementTime,1000);
-                    generateMines(mines, width, height, row, column)
+                    generateMines(mines, width, height, row, column);
                 }
                 if (grid[row][column] == 0) {
                     revealed[row][column] = true;
@@ -372,7 +372,7 @@ function createGrid() {
         revealed.push(revRow);
         flags.push(revRow2);
     }
-    console.log(flags)
+    console.log(flags);
 }
 
 function createPercentGrid() {
@@ -394,7 +394,7 @@ function createGame(mineNum, width1, height1) {
     } else if (mines == width * height) {
         alert("The grid is filled with mines!");
     } else if (mines < 0) {
-        alert("You can't have negative mines!")
+        alert("You can't have negative mines!");
     } else if (width > 5000 || height > 5000) {
         alert("Literally unplayable");
     } else if (width <= 0 || height <= 0) {

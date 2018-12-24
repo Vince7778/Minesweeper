@@ -1,43 +1,55 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Minesweeper</title>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" href="styles.css">
-    </head>
-    <body onload="loadGame()">
-        <script src="https://code.jquery.com/jquery-git.js"></script>
-        <script src="sweeper.js"></script>
-        <script src="graphics.js"></script>
-        <p id="message"></p>
-        <p>
-            Mines unflagged: <span id="unflagged">0</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Revealed squares: <span id="revealed">0</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Clicks: <span id="clicks">0</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Time: <span id="time">00:00</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            Show percentages? <input type="checkbox" id="percents" onclick="switchPercents()">
-        </p>
-        <table class="starthide"><tr><td class="invis"><table id="board" oncontextmenu="return false;"></table></td><td class="invis" id="besttimes"></td></tr></table>
-        <p>Select game type: <select id="typeselect" autocomplete="off">
+
+<head>
+    <title>Minesweeper</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body onload="loadGame()">
+    <script src="https://code.jquery.com/jquery-git.js"></script>
+    <script src="sweeper.js"></script>
+    <script src="graphics.js"></script>
+    <b id="message"></b>
+    <p id="heck">
+        <!-- <span id="message"></span> -->
+        Mines unflagged: <span id="unflagged" class="bspan">0</span>
+        Revealed squares: <span id="revealed" class="bspan">0</span>
+        Clicks: <span id="clicks" class="bspan">0</span>
+        Time: <span id="time" class="bspan">00:00</span>
+        Show percentages? <input type="checkbox" id="percents" onclick="switchPercents()">
+    </p>
+    <table class="starthide">
+        <tr>
+            <td id="besttimeseasy" class="invis"></td>
+            <td class="invis">
+                <table id="board" oncontextmenu="return false;"></table>
+            </td>
+            <td class="invis" id="besttimes"></td>
+        </tr>
+    </table>
+    <p>Select game type: <select id="typeselect" autocomplete="off">
             <option selected disabled hidden></option>
             <option value="preset">Presets</option>
-            <option value="custom">Custom</option> 
+            <option value="custom">Custom</option>
         </select></p>
-        <div id="custom" class="gametype">
-            <p>
-                # of mines: <input id="mines"><br>
-                Width: <input id="width"><br>
-                Height: <input id="height"><br>
-                <button onclick="getGame(0)">Submit</button>
-                <button onclick="getGame(1)">Get recommended game for width and height</button>
-            </p>
-        </div>
-        <div id="preset" class="gametype">
-            <p>
-                <button onclick="preset(0)">Easy</button>
-                <button onclick="preset(1)">Medium</button>
-                <button onclick="preset(2)">Hard</button>
-            </p>
-        </div>
-    </body>
+    <div id="custom" class="gametype">
+        <p>
+            # of mines: <input id="mines"><br>
+            Width: <input id="width"><br>
+            Height: <input id="height"><br>
+            <button onclick="getGame(0)">Submit</button>
+            <button onclick="getGame(1)">Get recommended game for width and height</button>
+        </p>
+    </div>
+    <div id="preset" class="gametype">
+        <p>
+            <button onclick="preset(0)">Easy</button>
+            <button onclick="preset(1)">Medium</button>
+            <button onclick="preset(2)">Hard</button>
+        </p>
+    </div>
+</body>
+
 </html>

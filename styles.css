@@ -1,3 +1,5 @@
+/* i'm really bad at css
+   if someone could help me that'd be great */
 #board, td:not(.invis) {
     border: 1px solid black;
     min-width: 25px;
@@ -50,13 +52,33 @@
 }
 #message {
     font-size: 30px;
+    display: none;
+    margin-top: 10px;
 }
 #besttimes {
     margin-left: 70px;
     margin-top: 70px;
-    width: 300px;
     overflow-wrap: break-word;
+    width: 50px;
 }
-#test {
-    display: inline;
+body {
+    display: inline-block;
+    border: 1px solid black;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.bspan {
+    display: inline-block;
+    min-width: 50px;
+}
+#heck {
+    margin-top: 10px;
+}
+.starthide {
+    margin-left: auto;
+    margin-right: auto;
+}
+#leftT {
+    min-width: 50px;
+    visibility: hidden;
 }
