@@ -13,12 +13,12 @@
     <script src="graphics.js"></script>
     <b id="message"></b>
     <p id="heck">
-        <!-- <span id="message"></span> -->
         Mines unflagged: <span id="unflagged" class="bspan">0</span>
         Revealed squares: <span id="revealed" class="bspan">0</span>
         Clicks: <span id="clicks" class="bspan">0</span>
         Time: <span id="time" class="bspan">00:00</span>
-        Show percentages? <input type="checkbox" id="percents" onclick="switchPercents()">
+        Show percentages? <span class="bspan"><input type="checkbox" id="percents" onclick="switchPercents()"></span>
+        Challenge mode (no flags)? <span class="bspan"><input type="checkbox" id="chalBox" onclick="switchChal()"></span>
     </p>
     <table class="starthide">
         <tr>

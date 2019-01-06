@@ -2,9 +2,17 @@
     Made by Vince7778, 2018
 */
 
-// On roadmap
-// TODO: challenge mode w/ no flags (expect this soon!)
-// TODO: support for custom mine detection layouts (not for a while)
+/*  On roadmap
+    TODO: challenge mode w/ no flags (expect this soon!)
+    TODO: keyboard control
+    TODO: "real" offline multiplayer - side by side, keyboard control
+    TODO: replay function, can see what moves happened when and replay back @ different speeds
+    TODO: support for custom mine detection layouts (not for a while)
+    TODO: "fake" offline multiplayer, challenges for other players
+        - generates code with same mines and board so that people can have a fair race
+        - uses replay function to side-by-side compare
+    TODO: online multiplayer?
+*/
 
 var grid = [];
 var revealed = [];
@@ -22,6 +30,8 @@ var printPercents = false;
 var bestPercent = 101;
 var width = 0;
 var height = 0;
+var challenge = false;
+var chalTimes = [[],[],[]];
 
 // begin functions that create games
 
@@ -31,10 +41,18 @@ function preset(i) {
             createGame(12,10,10);
             break;
         case 1:
-            createGame(85,24,24);
+            if (challenge) {
+                createGame(40,17,17);
+                break;
+            }
+            createGame(60,20,20);
             break;
         case 2:
-            createGame(180,50,24);
+            if (challenge) {
+                createGame(115,40,20);
+                break;
+            }
+            createGame(145,50,20);
             break;
         default:
             break;
@@ -219,7 +237,7 @@ function click(row, column) {
 
 function rclick(row, column) {
     if (!done) {
-        if (!revealed[row][column]) {
+        if (!revealed[row][column] && !challenge) {
             if (flags[row][column]) {
                 flags[row][column] = false;
                 numFlags--;
@@ -360,7 +378,7 @@ function zeroFill(number, width) {
 // begin local storage functions
 
 // localstorage -> page
-function timesFromString(s) {
+function timesFromString(s,chal) {
     var i = -1;
     var newBests = [[],[],[]];
     var letterString = "";
@@ -377,16 +395,26 @@ function timesFromString(s) {
             alert("Error reading times from localStorage!");
         }
     }
-    bestTimes = newBests;
+    if (!chal) {
+        bestTimes = newBests;
+    } else {
+        chalTimes = newBests;
+    }
 }
 
 // page -> localstorage
-function timesToString() {
+function timesToString(chal) {
     var s = "";
     for (var i = 0; i <= 2; i++) {
         s += "x";
-        for (var j = 0; j < bestTimes[i].length && j < 8; j++) {
-            s += bestTimes[i][j] + ",";
+        if (!chal) {
+            for (var j = 0; j < bestTimes[i].length && j < 8; j++) {
+                s += bestTimes[i][j] + ",";
+            }
+        } else {
+            for (var k = 0; k < chalTimes[i].length && k < 8; k++) {
+                s += chalTimes[i][k] + ",";
+            }
         }
     }
     return s;
@@ -398,20 +426,39 @@ function setBest() {
         var newTime = + new Date();
         var diff = newTime - startTime;
         var i = usingPreset-1;
-        for (var j = 0; j < 8; j++) {
-            if (bestTimes[i][j] != undefined) {
-                if (bestTimes[i][j] > diff) {
-                    bestTimes[i].splice(j, 0, diff);
+        if (!challenge) {
+            for (var j = 0; j < 8; j++) {
+                if (bestTimes[i][j] != undefined) {
+                    if (bestTimes[i][j] > diff) {
+                        bestTimes[i].splice(j, 0, diff);
+                        break;
+                    }
+                } else {
+                    bestTimes[i][j] = diff;
                     break;
                 }
-            } else {
-                bestTimes[i][j] = diff;
-                break;
+            }
+        } else {
+            for (var k = 0; k < 8; k++) {
+                if (chalTimes[i][k] != undefined) {
+                    if (chalTimes[i][k] > diff) {
+                        chalTimes[i].splice(k, 0, diff);
+                        break;
+                    }
+                } else {
+                    chalTimes[i][k] = diff;
+                    break;
+                }
             }
         }
         showBest();
     }
-    localStorage.setItem("times",timesToString());
+    if (!challenge) {
+        localStorage.setItem("times",timesToString(false));
+    } else {
+        localStorage.setItem("chal",timesToString(true));
+    }
+    
 }
 
 function clearBest() {
@@ -455,6 +502,22 @@ function debugGrid() {
         out += "\n";
     }
     console.log(out);
+}
+
+// activates and deactivates challenge mode
+function switchChal() {
+    done = true;
+    revealAll();
+    clearInterval(interval);
+    document.getElementById("percents").checked = false;
+    switchPercents();
+    if (document.getElementById("chalBox").checked) {
+        challenge = true;
+        showBest();
+    } else {
+        challenge = false;
+        showBest();
+    }
 }
 
 // end other functions

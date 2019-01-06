@@ -47,6 +47,10 @@ function clearBoard() {
 }
 
 function showBest() {
+    if (challenge) {
+        showBestChal();
+        return;
+    }
     var out = "";
     var out2 = "";
     out2 += "<p class='pmar'>Easy:</p>";
@@ -68,6 +72,35 @@ function showBest() {
         } else {
             for (var j = 0; j < 8 && j < bestTimes[i+1].length; j++) {
                 out += "<p class='pmar'>" + getReadableTime(bestTimes[i+1][j]) + "</p>";
+            }
+        }
+    }
+    document.getElementById("besttimes").innerHTML = out;
+    document.getElementById("besttimeseasy").innerHTML = out2;
+}
+
+function showBestChal() {
+    var out = "";
+    var out2 = "";
+    out2 += "<p class='pmar'>Easy:</p>";
+    if (chalTimes[0].length == 0) {
+        out2 += "<p class='pmar'>None</p>";
+    } else {
+        for (var n = 0; n < 8 && n < chalTimes[0].length; n++) {
+            out2 += "<p class='pmar'>" + getReadableTime(chalTimes[0][n]) + "</p>";
+        }
+    }
+    for (var i = 0; i <= 1; i++) {
+        if (i == 0) {
+            out += "<p class='pmar'>Medium:</p>";
+        } else if (i == 1) {
+            out += "<p class='pmar'>Hard:</p>";
+        }
+        if (chalTimes[i+1].length == 0) {
+            out += "<p class='pmar'>None</p>";
+        } else {
+            for (var j = 0; j < 8 && j < chalTimes[i+1].length; j++) {
+                out += "<p class='pmar'>" + getReadableTime(chalTimes[i+1][j]) + "</p>";
             }
         }
     }
@@ -106,9 +139,13 @@ function loadGame() {
     $(".gametype").hide();
     $(".starthide").hide();
     if (localStorage.getItem("times") != null) {
-        timesFromString(localStorage.getItem("times"));
+        timesFromString(localStorage.getItem("times"), false);
         showBest();
     }
+    if (localStorage.getItem("chal") != null) {
+        timesFromString(localStorage.getItem("chal"), true);
+    }
+    document.getElementById("chalBox").checked = false;
 }
 
 $(function() {
