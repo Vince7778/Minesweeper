@@ -180,6 +180,8 @@ function click(row, column) {
         if (!flags[row][column]) {
             if (grid[row][column] == -1) {
                 if (clicks == 0) {
+                    // this should really never happen
+                    alert("This should never happen! Clicked on mine before they were generated!");
                     createGame(mines, width, height);
                     click(row, column);
                 } else {
@@ -190,6 +192,7 @@ function click(row, column) {
                 if (clicks == 0) {
                     startTime = + new Date();
                     interval = setInterval(incrementTime,1000);
+                    incrementTime();
                     generateMines(mines, width, height, row, column);
                 }
                 if (grid[row][column] == 0) {
@@ -341,6 +344,16 @@ function getReadableTime(diff) { // breaks if over an hour (why would a game be 
     var min = Math.floor(diff/60000);
     var sec = Math.round((diff/1000) % 60);
     return zeroFill(min,2) + ":" + zeroFill(sec,2);
+}
+
+// from stackoverflow
+function zeroFill(number, width) {
+    width -= number.toString().length;
+    if ( width > 0 )
+    {
+      return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
+    }
+    return number + ""; // always return a string
 }
 
 // end utility functions
