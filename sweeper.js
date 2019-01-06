@@ -2,6 +2,10 @@
     Made by Vince7778, 2018
 */
 
+// On roadmap
+// TODO: challenge mode w/ no flags (expect this soon!)
+// TODO: support for custom mine detection layouts (not for a while)
+
 var grid = [];
 var revealed = [];
 var flags = [];
@@ -104,7 +108,6 @@ function createGrid() {
         revealed.push(revRow);
         flags.push(revRow2);
     }
-    console.log(flags);
 }
 
 // places mines around the grid
@@ -341,11 +344,6 @@ function getReadableTime(diff) { // breaks if over an hour (why would a game be 
 }
 
 // end utility functions
-// begin custom detection functions
-
-// TODO: make it able to count/not count different squares
-
-// end custom detection functions
 // begin local storage functions
 
 // localstorage -> page
@@ -374,7 +372,7 @@ function timesToString() {
     var s = "";
     for (var i = 0; i <= 2; i++) {
         s += "x";
-        for (var j = 0; j < bestTimes[i].length; j++) {
+        for (var j = 0; j < bestTimes[i].length && j < 8; j++) {
             s += bestTimes[i][j] + ",";
         }
     }
@@ -401,6 +399,13 @@ function setBest() {
         showBest();
     }
     localStorage.setItem("times",timesToString());
+}
+
+function clearBest() {
+    if (confirm("Are you sure you want to delete all your times?")) {
+        bestTimes = [[],[],[]];
+        localStorage.setItem("times","");
+    }
 }
 
 // end local storage functions
