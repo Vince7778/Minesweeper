@@ -1,5 +1,26 @@
 /* i'm really bad at css
    if someone could help me that'd be great */
+@keyframes back_animate {
+    0%{background-color:#555555;}
+    100%{background-color:#555555;}
+    25%{background-color:#888888;}
+    50%{background-color:#BBBBBB;}
+    75%{background-color:#888888;}
+}
+@keyframes flag_animate {
+    0%{background-color:#111111;}
+    100%{background-color:#111111;}
+    25%{background-color:#444444;}
+    50%{background-color:#777777;}
+    75%{background-color:#444444;}
+}
+@keyframes reveal_animate {
+    0%{border: 4px solid #555555;}
+    100%{border: 4px solid #555;}
+    25%{border: 4px solid #888;}
+    50%{border: 4px solid #BBB;}
+    75%{border: 4px solid #888;}
+}
 #board, td:not(.invis) {
     border: 1px solid black;
     min-width: 25px;
@@ -37,6 +58,18 @@
 .empty {
     background-color: #999999;
     color: black;
+}
+.selected.empty {
+    animation: back_animate 2s infinite linear;
+}
+.selected.flag {
+    animation: flag_animate 2s infinite linear;
+}
+.selected.revealed {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    animation: reveal_animate 2s infinite linear;
 }
 .best {
     background-color: yellow;

@@ -1,9 +1,9 @@
 /*
-    Made by Vince7778, 2018
+    Made by Vince7778, 2018-2019
 */
 
 /*  On roadmap
-    TODO: challenge mode w/ no flags (expect this soon!)
+    DONE: challenge mode w/ no flags - finished 1-6-19
     TODO: keyboard control
     TODO: "real" offline multiplayer - side by side, keyboard control
     TODO: replay function, can see what moves happened when and replay back @ different speeds
@@ -22,7 +22,7 @@ var numFlags = 0;
 var clicks = 0;
 var mines = 0;
 var revealedSquares = 0;
-var done = false;
+var done = true;
 var startTime = 0;
 var bestTimes = [[],[],[]];
 var usingPreset = 0;
@@ -32,6 +32,8 @@ var width = 0;
 var height = 0;
 var challenge = false;
 var chalTimes = [[],[],[]];
+var selected = [0,0];
+var showSelected = false;
 
 // begin functions that create games
 
@@ -168,6 +170,7 @@ $(document).on("contextmenu", "#board td", function(e){
 });
 
 function separateClick(data,type) {
+    showSelected = false;
     var foundnum1 = false;
     var endnum1 = false;
     var num1 = "";
@@ -469,6 +472,34 @@ function clearBest() {
 }
 
 // end local storage functions
+// begin keyboard navigation functions
+
+window.onkeydown = function(e){
+    showSelected = true;
+    if ((e.keyCode == 37 || e.keyCode == 65) && inBounds(selected[0],selected[1]-1)) {
+        selected[1]--;
+    } else if ((e.keyCode == 38 || e.keyCode == 87) && inBounds(selected[0]-1,selected[1])) {
+        selected[0]--;
+    } else if ((e.keyCode == 39 || e.keyCode == 68) && inBounds(selected[0],selected[1]+1)) {
+        selected[1]++;
+    } else if ((e.keyCode == 40 || e.keyCode == 83) && inBounds(selected[0]+1,selected[1])) {
+        selected[0]++;
+    } else if (e.keyCode == 32 || e.keyCode == 13) {
+        click(selected[0],selected[1]);
+    } else if (e.keyCode == 70) {
+        rclick(selected[0],selected[1]);
+    }
+    drawBoard();
+};
+
+// so that pressing space won't trigger selected button
+window.onkeyup = function(e) {
+    if (e.keyCode == 32 || e.keyCode == 13) {
+        e.preventDefault();
+    }
+};
+
+// end keyboard navigation functions
 // begin other functions
 
 // wow i wonder what this does

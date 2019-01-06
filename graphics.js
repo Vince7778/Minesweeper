@@ -4,36 +4,43 @@ function drawBoard() {
     for (var i = 0; i < height; i++) {
         for (var j = 0; j < width; j++) {
             var out = "";
+            var ele = document.getElementById("row"+i+"col"+j);
             if (flags[i][j]) { // flagged?
                 if (grid[i][j] != -1 && done) {
-                    document.getElementById("row"+i+"col"+j).className = "empty";
+                    ele.className = "empty";
                     out = "F";
                 } else {
-                    document.getElementById("row"+i+"col"+j).className = "flag";
+                    ele.className = "flag";
                     out = "F";
                 }
             } else if (revealed[i][j]) { // revealed?
                 if (grid[i][j] == -1) {
-                    document.getElementById("row"+i+"col"+j).className = "mine";
-                } else if (grid[i][j] == 0) {
-                    document.getElementById("row"+i+"col"+j).className = "";
+                    ele.className = "mine";
                 } else {
-                    document.getElementById("row"+i+"col"+j).className = "c"+grid[i][j];
-                    out = grid[i][j];
+                    if (grid[i][j] == 0) {
+                        ele.className = "";
+                    } else {
+                        ele.className = "c"+grid[i][j];
+                        out = grid[i][j];
+                    }
+                    ele.className += " revealed";
                 }
             } else if (printPercents) { // shows best squares
                 if (percentages[i][j] == bestPercent && printPercents && !revealed[i][j]) {
-                    document.getElementById("row"+i+"col"+j).className = "best";
+                    ele.className = "best";
                 } else {
-                    document.getElementById("row"+i+"col"+j).className = "empty";
+                    ele.className = "empty";
                 }
             } else { // unopened squares
-                document.getElementById("row"+i+"col"+j).className = "empty";
+                ele.className = "empty";
+            }
+            if (selected[0] == i && selected[1] == j && showSelected) {
+                ele.className += " selected";
             }
             
-            document.getElementById("row"+i+"col"+j).innerHTML = out;
+            ele.innerHTML = out;
             if (printPercents && !revealed[i][j] && !flags[i][j] && percentages[i][j] != 1.02) {
-                document.getElementById("row"+i+"col"+j).innerHTML += " "+Math.round(100*percentages[i][j]);
+                ele.innerHTML += " "+Math.round(100*percentages[i][j]);
             }
         }
     }
@@ -115,6 +122,8 @@ function fin(id) {
         done = true;
         clearInterval(interval);
         setBest();
+        showSelected = false;
+        drawBoard();
     } else if (id == 1) { // lose
         document.getElementById("message").innerHTML = "YOU LOSE!!! :(";
         document.getElementById("message").style.display = "block";
