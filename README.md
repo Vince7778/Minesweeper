@@ -8,3 +8,8 @@ This is just a personal project that I wanted to do.
 * Saving of best times for aforementioned presets!
 * Terrible-looking graphics!
 * Mildly readable code!
+
+## Keyboard Controls
+Use arrow keys or WASD to move your selector around the board.  
+Use space or enter to reveal.  
+Use the F key to flag a tile.
