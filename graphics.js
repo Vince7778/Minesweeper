@@ -81,14 +81,12 @@ function fin(id) {
         document.getElementById("message").style.display = "block";
         done = true;
         clearInterval(interval);
-        interval = 0;
         setBest();
     } else if (id == 1) { // lose
         document.getElementById("message").innerHTML = "YOU LOSE!!! :(";
         document.getElementById("message").style.display = "block";
         done = true;
         clearInterval(interval);
-        interval = 0;
         drawBoard();
     } else if (id == 2) { // resets game
         document.getElementById("message").style.display = "none";
