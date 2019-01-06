@@ -46,12 +46,6 @@ function clearBoard() {
     document.getElementById("board").innerHTML = "";
 }
 
-function getReadableTime(diff) { // breaks if over an hour (why)
-    var min = Math.floor(diff/60000);
-    var sec = Math.round((diff/1000) % 60);
-    return zeroFill(min,2) + ":" + zeroFill(sec,2);
-}
-
 function showBest() {
     var out = "";
     var out2 = "";
@@ -128,3 +122,10 @@ function loadGame() {
         showBest();
     }
 }
+
+$(function() {
+    $('#typeselect').change(function(){
+        $('.gametype').hide();
+        $('#' + $(this).val()).show();
+    });
+});
